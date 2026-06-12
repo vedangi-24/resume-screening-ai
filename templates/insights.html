@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Insights - ResumeIQ</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header class="site-header"><div class="brand"><span class="brand-name">ResumeIQ</span></div></header>
+  <main style="padding:24px;">
+    <h2>Insights</h2>
+    <div class="insights-grid">
+      <div class="insight-card">Total candidates: <strong>{{ insights.count }}</strong></div>
+      <div class="insight-card">Average score: <strong>{{ insights.avg_score }}</strong></div>
+      <div class="insight-card">Median score: <strong>{{ insights.median_score }}</strong></div>
+      <div class="insight-card">Top score: <strong>{{ insights.max_score }}</strong></div>
+      <div class="insight-card">Low score: <strong>{{ insights.min_score }}</strong></div>
+    </div>
+
+    <h3 style="margin-top:18px">Top Missing Skills</h3>
+    {% if top_missing %}
+      <ul>
+        {% for skill, cnt in top_missing %}
+          <li>{{ skill }} — {{ cnt }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No missing skills data available.</p>
+    {% endif %}
+  </main>
+</body>
+</html>

@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>ResumeIQ – AI Resume Screening</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="{{ 'compact' if not candidate_results else '' }}">
+
+<!-- ── Loading overlay (shown while form submits) ── -->
+<div id="loadingOverlay" class="loading-overlay" style="display:none">
+    <div class="loading-box">
+        <div class="spinner"></div>
+        <p class="loading-text">Analyzing resume…</p>
+        <p class="loading-sub">Extracting skills and scoring against job description</p>
+    </div>
+</div>
+
+<!-- ── Header ── -->
+<header class="site-header">
+    <div class="brand">
+        <div class="logo-wrap">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <rect width="28" height="28" rx="8" fill="url(#lg)"/>
+                <path d="M8 14l4 4 8-8" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <defs><linearGradient id="lg" x1="0" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#6c5ce7"/><stop offset="1" stop-color="#9b59ff"/>
+                </linearGradient></defs>
+            </svg>
+        </div>
+        <span class="brand-name">ResumeIQ</span>
+        <span class="brand-sub">AI Resume Screening</span>
+    </div>
+    <nav></nav>
+</header>
+
+<!-- ── Hero ── -->
+<main class="hero">
+    <div class="badge-pill">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="7" fill="#6c5ce7" opacity=".15"/><circle cx="7" cy="7" r="3" fill="#6c5ce7"/></svg>
+        Powered by AI matching
+    </div>
+
+    <h1>Screen resumes in seconds,<br><span class="accent-text">hire with confidence.</span></h1>
+    <p class="hero-sub">Upload a resume, paste your job description, and get instant ATS scoring, skill gap analysis, and AI recommendations.</p>
+
+    <div style="margin-top:10px;display:flex;gap:10px;align-items:center">
+        <a class="download-btn" href="/export-csv">Export CSV</a>
+        
+        <a class="download-btn" href="/insights">Insights</a>
+        <label style="font-size:13px;color:var(--muted);margin-left:8px"><input type="checkbox" id="biasMode"> Bias-reduction mode</label>
+    </div>
+
+    {% if error %}
+        <div class="error-banner">{{ error }}</div>
+    {% endif %}
+
+    <!-- ── Upload Form — plain POST, no XHR ── -->
+    <form id="uploadForm" method="POST" enctype="multipart/form-data">
+        <div class="form-grid">
+
+            <!-- Left: Upload -->
+            <div class="form-card">
+                <div class="form-card-header">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    Upload Resumes
+                </div>
+
+                <div class="drop-zone" id="dropZone">
+                    <svg class="drop-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#c4cfe8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                    <p class="drop-text">Click to upload or drag PDFs here</p>
+                    <p class="drop-hint">PDF — multiple allowed</p>
+                    <input id="resumeInput" type="file" name="resume" multiple accept=".pdf">
+                    <label for="resumeInput" class="choose-btn">Choose files</label>
+                </div>
+
+                <div id="fileList" class="file-list-wrap" aria-live="polite"></div>
+                <div id="uploadProgressWrap" style="display:none;margin-top:8px">
+                    <div style="background:#eef; height:10px; border-radius:6px; overflow:hidden">
+                        <div id="uploadProgressBar" style="height:10px;width:0%;background:linear-gradient(90deg,#6c5ce7,#9b59ff)"></div>
+                    </div>
+                    <div style="font-size:12px;margin-top:6px;color:var(--muted)" id="uploadProgressText">0%</div>
+                </div>
+
+                <div class="analyze-row" style="margin-top:12px">
+                    <button class="analyze-btn" type="submit" id="analyzeBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        Analyze Resumes
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right: Job Description -->
+            <div class="form-card">
+                <div class="form-card-header">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+                    Job Description
+                </div>
+
+                <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
+                    <label style="font-size:13px;color:var(--muted);white-space:nowrap">Preset:</label>
+                    <select id="presetSelect" class="select-field">
+                        <option value="">Custom</option>
+                        <option value="Frontend">Frontend Engineer</option>
+                        <option value="Data Scientist">Data Scientist</option>
+                        <option value="Product Manager">Product Manager</option>
+                    </select>
+                </div>
+
+                <textarea id="jobDescription" name="job_description" class="jd-textarea" placeholder="Paste your job description here…">{{ job_description }}</textarea>
+                {% if must_haves %}
+                <div class="must-haves">
+                    <label style="font-size:13px;color:var(--muted);margin-top:8px">Must-have skills detected:</label>
+                    <div class="tag-cloud">
+                        {% for m in must_haves %}<span class="tag tag-red">{{ m }}</span>{% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="weights-wrap">
+                    <label class="weights-label">Scoring weights (skills / experience / education)</label>
+                    <div class="sliders-row">
+                        <input type="range" id="w_skill" name="w_skill" min="0" max="100" value="50" class="slider">
+                        <input type="range" id="w_exp"   name="w_exp"   min="0" max="100" value="30" class="slider">
+                        <input type="range" id="w_edu"   name="w_edu"   min="0" max="100" value="20" class="slider">
+                    </div>
+                        <div class="weight-labels">
+                            <span>Skills: <b id="w_skill_val">50</b>%</span>
+                            <span>Experience: <b id="w_exp_val">30</b>%</span>
+                            <span>Education: <b id="w_edu_val">20</b>%</span>
+                        </div>
+                        <div style="margin-top:10px;display:flex;align-items:center;gap:8px">
+                            <input type="checkbox" id="use_ai" name="use_ai" value="1">
+                            <label for="use_ai" style="font-size:13px;color:var(--muted);margin:0">Use AI analysis (requires API key)</label>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    <!-- ════════════════════════════════════════════
+         RESULTS — rendered server-side after POST
+         ════════════════════════════════════════════ -->
+
+    {% if candidate_results and candidate_results|length == 1 %}
+    {% set top = candidate_results[0] %}
+    <div class="results-section" id="results">
+
+        <div class="results-heading">
+            <h2>Analysis Results</h2>
+            <span class="results-filename"><span id="singleCandidateName" data-name="{{ top.name }}">{{ top.name }}</span></span>
+        </div>
+
+        <!-- 4 score cards -->
+        <div class="score-cards">
+            <div class="score-card">
+                <div class="score-card-icon icon-blue">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                </div>
+                <div class="score-card-label">ATS SCORE</div>
+                <div class="score-card-value">{{ top.score }}%</div>
+            </div>
+            <div class="score-card">
+                <div class="score-card-icon icon-green">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                </div>
+                <div class="score-card-label">MATCHED SKILLS</div>
+                <div class="score-card-value">{{ top.matched|length }}</div>
+            </div>
+            <div class="score-card">
+                <div class="score-card-icon icon-red">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                </div>
+                <div class="score-card-label">MISSING SKILLS</div>
+                <div class="score-card-value">{{ top.missing|length }}</div>
+            </div>
+            <div class="score-card">
+                <div class="score-card-icon icon-teal">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v6"/><path d="M6 10v10h12V10"/></svg>
+                </div>
+                <div class="score-card-label">EXPERIENCE</div>
+                <div class="score-card-value">{{ (top.profile.years_experience|string ~ ' yrs') if (top.profile and top.profile.years_experience) else (top.profile.experience_level if top.profile and top.profile.experience_level else '—') }}</div>
+            </div>
+            <div class="score-card">
+                <div class="score-card-icon icon-orange">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+                </div>
+                <div class="score-card-label">STATUS</div>
+                <div class="score-card-value">
+                    <span class="status-badge status-{{ top.status|lower }}">{{ top.status }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Match strength bar -->
+        <div class="match-bar-card">
+            <div class="match-bar-header">
+                <span class="match-bar-title">Match Strength</span>
+                <span class="match-bar-pct accent-text">{{ top.score }}%</span>
+            </div>
+                <div class="match-bar-track">
+                <div class="match-bar-fill" data-score="{{ top.score }}"></div>
+            </div>
+        </div>
+
+        <!-- Skills panels -->
+        <div class="skills-row">
+            <div class="skills-panel">
+                <div class="skills-panel-header">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    <span>Matched Skills</span>
+                    <span class="badge badge-green">{{ top.matched|length }}</span>
+                </div>
+                {% if top.matched %}
+                    <div class="tag-cloud">
+                        {% for skill in top.matched %}<span class="tag tag-green">{{ skill }}</span>{% endfor %}
+                    </div>
+                {% else %}
+                    <p class="no-data">None detected — try a more specific job description.</p>
+                {% endif %}
+            </div>
+
+            <div class="skills-panel">
+                <div class="skills-panel-header">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                    <span>Missing Skills</span>
+                    <span class="badge badge-red">{{ top.missing|length }}</span>
+                </div>
+                {% if top.missing %}
+                    <div class="tag-cloud">
+                        {% for skill in top.missing %}<span class="tag tag-red">{{ skill }}</span>{% endfor %}
+                    </div>
+                {% else %}
+                    <p class="no-data">None — great match!</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- AI Recommendations -->
+        {% if top.ai_verdict %}
+        <div class="insights-card ai-verdict-card">
+            <div class="insights-header">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f0a500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                AI Verdict
+            </div>
+            <div class="ai-verdict-text">{{ top.ai_verdict }}</div>
+        </div>
+        {% endif %}
+
+        {% if ai_suggestions %}
+        <div class="insights-card">
+            <div class="insights-header">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f0a500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                AI Recommendations
+            </div>
+            <ul class="insights-list">
+                {% for item in ai_suggestions %}<li>{{ item }}</li>{% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- Download -->
+        <div class="results-footer">
+            <a class="download-btn" href="/download-report">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download ATS Report
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- ── Multi-resume ranking ── -->
+    {% if candidate_results and candidate_results|length > 1 %}
+    <div class="results-section" id="results">
+        <div class="ranking-header">
+            <h2 class="ranking-title">🏆 Candidate Ranking</h2>
+            <a class="download-btn secondary-btn" href="/export-csv">Export CSV</a>
+        </div>
+        <div class="ranking-table-wrap">
+            <table class="ranking-table">
+                <thead>
+                    <tr><th>Rank</th><th>Candidate</th><th>Experience</th><th>ATS Score</th><th>Status</th><th>AI Verdict</th></tr>
+                </thead>
+                <tbody>
+                    {% for c in candidate_results %}
+                    <tr class="candidate-row" data-id="{{ c.id }}">
+                        <td class="rank-col">{{ loop.index }}</td>
+                        <td class="candidate-name" data-name="{{ c.filename or c.name }}">{{ c.filename or c.name }}</td>
+                        <td class="exp-col">
+                            {{ (c.profile.years_experience ~ ' yrs') if (c.profile and c.profile.years_experience) else (c.profile.experience_level if c.profile and c.profile.experience_level else '') }}
+                        </td>
+                        <td>
+                            <div class="inline-bar-wrap">
+                                <div class="inline-bar-fill" data-score="{{ c.score }}"></div>
+                                <span class="inline-bar-label">{{ c.score }}%</span>
+                            </div>
+                        </td>
+                        <td><span class="status-pill status-{{ c.status|lower }}">{{ c.status }}</span></td>
+                        <td class="ai-verdict-col">{{ c.ai_verdict|default('', true)|truncate(60, True, '...') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <p class="candidate-count">Total candidates analyzed: <strong>{{ candidate_results|length }}</strong></p>
+    </div>
+    {% endif %}
+
+</main>
+
+<!-- ── Candidate drawer ── -->
+<div id="candidateDrawer" class="drawer" aria-hidden="true">
+    <div class="drawer-inner">
+        <div class="drawer-top">
+            <h3 id="drawerName">Candidate</h3>
+            <button id="closeDrawer" class="close-btn" aria-label="Close">✕</button>
+        </div>
+        <p id="drawerProfile" class="drawer-profile"></p>
+        <div id="drawerContacts" class="drawer-contacts"></div>
+        <div id="drawerFlags" class="drawer-flags"></div>
+        <div id="drawerMustHaves" class="drawer-musts"></div>
+        <div class="drawer-section">
+            <h4>Skills</h4>
+            <div id="drawerSkills" class="tag-cloud"></div>
+        </div>
+        <div class="drawer-section">
+            <h4>AI Interview Questions</h4>
+            <ul id="drawerQuestions" class="question-list"></ul>
+        </div>
+        <div id="aiVerdict" class="ai-verdict"></div>
+        <div class="drawer-actions">
+            <button data-action="SHORTLIST" class="action-btn shortlist-btn" id="btnShortlist">Shortlist</button>
+            <button data-action="REVIEW"    class="action-btn review-btn"    id="btnReview">Maybe</button>
+            <button data-action="REJECT"    class="action-btn reject-btn"    id="btnReject">Reject</button>
+        </div>
+        <form id="noteForm" style="margin-top:14px">
+            <input type="hidden" name="id" id="noteId">
+            <div style="display:flex;gap:8px">
+                <input type="text" name="note" id="noteText" placeholder="Add a note…" class="note-input">
+                <button class="action-btn shortlist-btn" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ── Scripts ── -->
+<script>
+(function(){
+
+    /* ── Show loading overlay on form submit ── */
+    var form = document.getElementById('uploadForm');
+    var overlay = document.getElementById('loadingOverlay');
+    if(form){
+        form.addEventListener('submit', function(e){
+            var input = document.getElementById('resumeInput');
+            var files = input ? Array.from(input.files) : [];
+            if(!files.length){
+                e.preventDefault();
+                alert('Please choose at least one PDF resume before clicking Analyze.');
+                return;
+            }
+            // If large batch (20+), upload via XHR to show progress
+            if(files.length >= 20){
+                e.preventDefault();
+                if(overlay) overlay.style.display = 'flex';
+                var progressWrap = document.getElementById('uploadProgressWrap');
+                var progressBar = document.getElementById('uploadProgressBar');
+                var progressText = document.getElementById('uploadProgressText');
+                if(progressWrap) progressWrap.style.display = 'block';
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/');
+                xhr.upload.onprogress = function(ev){
+                    if(ev.lengthComputable){
+                        var pct = Math.round((ev.loaded/ev.total)*100);
+                        if(progressBar) progressBar.style.width = pct + '%';
+                        if(progressText) progressText.textContent = pct + '%';
+                    }
+                };
+                xhr.onload = function(){
+                    if(xhr.status >=200 && xhr.status < 400){
+                        location.reload();
+                    } else {
+                        alert('Upload failed (status '+xhr.status+')');
+                        if(overlay) overlay.style.display = 'none';
+                        if(progressWrap) progressWrap.style.display = 'none';
+                    }
+                };
+                xhr.onerror = function(){
+                    alert('Upload error');
+                    if(overlay) overlay.style.display = 'none';
+                    if(progressWrap) progressWrap.style.display = 'none';
+                };
+
+                var fd = new FormData(form);
+                xhr.send(fd);
+                return;
+            }
+
+            // Show overlay — form submits normally as multipart POST
+            if(overlay) overlay.style.display = 'flex';
+        });
+    }
+
+    /* ── Scroll to results if present ── */
+    var results = document.getElementById('results');
+    if(results){
+        setTimeout(function(){ results.scrollIntoView({behavior:'smooth', block:'start'}); }, 100);
+    }
+
+    /* ── File input display ── */
+    var input = document.getElementById('resumeInput');
+    var fileListWrap = document.getElementById('fileList');
+    var dropZone = document.getElementById('dropZone');
+
+    function renderFileList(files){
+        if(!fileListWrap) return;
+        fileListWrap.innerHTML = '';
+        Array.from(files||[]).forEach(function(f){
+            var d = document.createElement('div');
+            d.className = 'file-item';
+            d.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6c5ce7" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><strong>'+f.name+'</strong><span class="file-size">'+Math.round((f.size||0)/1024)+' KB</span>';
+            fileListWrap.appendChild(d);
+        });
+    }
+
+    if(input){
+        input.addEventListener('change', function(){ renderFileList(input.files); });
+    }
+
+    if(dropZone){
+        dropZone.addEventListener('click', function(e){
+            if(e.target !== input && !e.target.closest('label')) input.click();
+        });
+        dropZone.addEventListener('dragover', function(e){ e.preventDefault(); dropZone.classList.add('dragging'); });
+        dropZone.addEventListener('dragleave', function(){ dropZone.classList.remove('dragging'); });
+        dropZone.addEventListener('drop', function(e){
+            e.preventDefault(); dropZone.classList.remove('dragging');
+            var dt = e.dataTransfer;
+            if(dt && dt.files && dt.files.length){
+                // Transfer dragged files to the real input via DataTransfer
+                try {
+                    var transfer = new DataTransfer();
+                    Array.from(dt.files).forEach(function(f){ transfer.items.add(f); });
+                    input.files = transfer.files;
+                    renderFileList(input.files);
+                } catch(err) {
+                    // Fallback: just show the name, form will use input.files
+                    renderFileList(dt.files);
+                }
+            }
+        });
+    }
+
+    /* ── Preset dropdown ── */
+    var preset = document.getElementById('presetSelect');
+    var jd = document.getElementById('jobDescription');
+    if(preset && jd){
+        preset.addEventListener('change', function(){
+            var v = preset.value;
+            if(v==='Frontend') jd.value='We are hiring a Senior Frontend Engineer with strong experience in React, TypeScript, Tailwind CSS, and modern testing frameworks. Familiarity with Node.js, REST APIs, GraphQL, and CI/CD pipelines is a plus.';
+            else if(v==='Data Scientist') jd.value='Data Scientist: Python, machine learning, statistics, SQL, TensorFlow or PyTorch, pandas, feature engineering, model deployment.';
+            else if(v==='Product Manager') jd.value='Product Manager: roadmap planning, stakeholder management, analytics, communication, agile, user research, A/B testing.';
+        });
+    }
+
+    /* ── Weight sliders ── */
+    ['w_skill','w_exp','w_edu'].forEach(function(id){
+        var r=document.getElementById(id), o=document.getElementById(id+'_val');
+        if(r&&o) r.addEventListener('input',function(){ o.textContent=r.value; });
+    });
+
+    /* ── Candidate drawer (multi-resume) ── */
+    function generateQuestions(skills){
+        var qs=[];
+        (skills||[]).slice(0,5).forEach(function(s){
+            qs.push('Tell me about a project where you used '+s+'.');
+            qs.push('How would you debug a problem in '+s+'?');
+        });
+        return qs.slice(0,5);
+    }
+
+    function openDrawer(candidate){
+        if(!candidate) return;
+        document.getElementById('drawerName').textContent = candidate.name||'';
+        var prof=[];
+        if(candidate.profile){
+            prof.push(candidate.profile.current_role||'');
+            prof.push(candidate.profile.education||'');
+            if(candidate.profile.years_experience) prof.push(candidate.profile.years_experience+' yrs exp');
+        }
+        document.getElementById('drawerProfile').textContent = prof.filter(Boolean).join(' • ');
+        // contacts
+        var contactsDiv = document.getElementById('drawerContacts'); contactsDiv.innerHTML='';
+        if(candidate.profile){
+            ['email','phone','linkedin','github'].forEach(function(k){
+                var v = candidate.profile[k];
+                if(v){
+                    var span = document.createElement('div'); span.className='contact-item'; span.textContent = v; contactsDiv.appendChild(span);
+                }
+            });
+        }
+
+        // red flags
+        var flagsDiv = document.getElementById('drawerFlags'); flagsDiv.innerHTML='';
+        if(candidate.profile && candidate.profile.red_flags && candidate.profile.red_flags.length){
+            candidate.profile.red_flags.forEach(function(f){ var el=document.createElement('span'); el.className='flag-pill'; el.textContent=f; flagsDiv.appendChild(el); });
+        }
+        // missing must-haves
+        var mustDiv = document.getElementById('drawerMustHaves'); mustDiv.innerHTML='';
+        if(candidate.must_haves && candidate.must_haves.length){
+            var missing = (candidate.missing||[]).map(function(x){ return x.toLowerCase(); });
+            candidate.must_haves.forEach(function(mh){ if(mh && missing.indexOf(mh.toLowerCase()) !== -1){ var el=document.createElement('span'); el.className='flag-pill must-missing'; el.textContent='Missing must-have: '+mh; mustDiv.appendChild(el); } });
+        }
+
+        var sd=document.getElementById('drawerSkills'); sd.innerHTML='';
+        (candidate.skills||[]).forEach(function(s){ var el=document.createElement('span'); el.className='tag tag-purple'; el.textContent=s; sd.appendChild(el); });
+        var ql=document.getElementById('drawerQuestions'); ql.innerHTML='';
+        var qs=candidate.ai_questions&&candidate.ai_questions.length?candidate.ai_questions:generateQuestions(candidate.skills);
+        qs.forEach(function(q){ var li=document.createElement('li'); li.textContent=q; ql.appendChild(li); });
+        // AI verdict short display
+        document.getElementById('aiVerdict').textContent = candidate.ai_verdict || (candidate.ai_score?('AI score: '+candidate.ai_score):'');
+        document.getElementById('noteId').value=candidate.id||'';
+        var drawer=document.getElementById('candidateDrawer');
+        drawer.style.display='block'; drawer.setAttribute('aria-hidden','false');
+        // apply bias masking if enabled
+        var biasCb = document.getElementById('biasMode');
+        if(biasCb && biasCb.checked){ applyBiasMode(true); }
+    }
+
+    document.querySelectorAll('.candidate-row').forEach(function(r){
+        r.addEventListener('click', function(){
+            var id=r.getAttribute('data-id');
+            var c=(window.CANDIDATES||[]).find(function(x){ return x.id==id; });
+            if(c) openDrawer(c);
+        });
+    });
+
+    var closeBtn=document.getElementById('closeDrawer');
+    if(closeBtn) closeBtn.addEventListener('click', function(){ var d=document.getElementById('candidateDrawer'); d.style.display='none'; d.setAttribute('aria-hidden','true'); });
+
+    ['btnShortlist','btnReview','btnReject'].forEach(function(bid){
+        var el=document.getElementById(bid); if(!el) return;
+        el.addEventListener('click', function(){
+            var action=el.getAttribute('data-action'), cid=document.getElementById('noteId').value;
+            fetch('/candidate-action',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'id='+encodeURIComponent(cid)+'&action='+encodeURIComponent(action)}).then(function(){ location.reload(); });
+        });
+    });
+
+    var noteForm=document.getElementById('noteForm');
+    if(noteForm) noteForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        var cid=document.getElementById('noteId').value, note=document.getElementById('noteText').value;
+        fetch('/candidate-action',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'id='+encodeURIComponent(cid)+'&note='+encodeURIComponent(note)}).then(function(){ location.reload(); });
+    });
+
+    /* ── Load candidates for drawer lookup only (do not populate upload list) ── */
+    fetch('/candidates.json').then(function(r){ return r.json(); }).then(function(data){ window.CANDIDATES=data||[]; }).catch(function(){ window.CANDIDATES=[]; });
+
+    /* ── Bias-reduction mode: mask names/education when toggled ── */
+    function applyBiasMode(on){
+        document.querySelectorAll('.candidate-name').forEach(function(el){
+            if(on){
+                el.dataset.orig = el.textContent;
+                el.textContent = 'Candidate';
+            } else {
+                if(el.dataset.orig) el.textContent = el.dataset.orig;
+            }
+        });
+        var single = document.getElementById('singleCandidateName');
+        if(single){
+            if(on){ single.dataset.orig = single.textContent; single.textContent = 'Candidate'; }
+            else if(single.dataset.orig) single.textContent = single.dataset.orig;
+        }
+        var drawerName = document.getElementById('drawerName');
+        var drawerProfile = document.getElementById('drawerProfile');
+        if(drawerName){ if(on){ drawerName.dataset.orig = drawerName.textContent; drawerName.textContent = 'Candidate'; } else if(drawerName.dataset.orig) drawerName.textContent = drawerName.dataset.orig; }
+        if(drawerProfile){ if(on){ drawerProfile.dataset.orig = drawerProfile.textContent; drawerProfile.textContent = 'Profile hidden'; } else if(drawerProfile.dataset.orig) drawerProfile.textContent = drawerProfile.dataset.orig; }
+    }
+
+    var biasCheckbox = document.getElementById('biasMode');
+    if(biasCheckbox){ biasCheckbox.addEventListener('change', function(){ applyBiasMode(biasCheckbox.checked); }); }
+
+    // apply widths from data-score attributes to avoid template-in-CSS issues
+    document.querySelectorAll('.match-bar-fill, .inline-bar-fill').forEach(function(el){
+        var v = el.dataset.score || 0;
+        el.style.width = (isNaN(v) ? 0 : v) + '%';
+    });
+
+})();
+</script>
+</body>
+</html>

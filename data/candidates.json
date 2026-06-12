@@ -1,0 +1,117 @@
+[
+  {
+    "id": "1781194632-126224a7-vedangi_kulkarni_vit (6).pdf",
+    "filename": "vedangi_kulkarni_vit_6.pdf",
+    "name": "Vedangi  Kulkarni",
+    "text": "Vedangi  Kulkarni  \nEmail:  vedangi.kulkarni22@vit.edu  | Mobile:  +91-7715942338 \nLinkedIn: vedangi -kulkarni  | GitHub: vedangi -24 \nLocation:  Pune,  Maharashtra,  India \nEducation  \nB.Tech  in Computer  Engineering  \nVishwakarma  Institute  of Technology,  Pune  | 2022  - 2026 \nCurrent CGPA: 7.63  \n12th Percentage:  79.4%  \n10th Percentage:  85.8%  \nTechnical  Skills  \nLanguages:C,  React , Java,  Python,  HTML,  JavaScript,  CSS,  Arduino  Programming \nTools & Platforms: GitHub, VS  Code, R Studio, Figma, Blynk, Flask  \nDatabases:  MySQL,  MongoDB, Google cloud storage  \nSoft Skills:  Leadership,  Team  Collaboration,  Documentation,  Communication  \n \nKey Projects  & Technical  Contributions  \nFraud  Detection  Using  Graph  AI \nFlask -based  system  detecting  fraud  using  Random  Forest  (80:20  split).  Interactive  static  & dynamic  NetworkX  graphs  (red=fraud,  blue=normal). \nTech: Python, Flask, Random Forest, NetworkX, HTML/CSS  \nFood  Ordering  Website  with ML \nFull-stack  app with  content -based  recommendation  and sentiment  analysis on  Kaggle  reviews using  scikit -learn,  pandas,  and NumPy. \nTech: Python, Flask, scikit -learn, Pandas, NumPy, HTML, CSS, JS  \nBusiness  Process  Automation  System  \nTask  management  web app with dashboard  alerts  and MySQL  backend  for tracking  assignments. \nTech: Python, JavaScript, HTML, CSS, MySQL  \nAdvanced  Task  Optimizer  \nGUI tool analyzing  sorting  & searching  algorithm  runtimes with  bar chart  visualization. \nTech: Python, Matplotlib  \nCamera  Car with Pan-Tilt Camera  \nWi-Fi controlled  surveillance  vehicle  via Blynk app  with pan-tilt servo  camera  control. \nTech: Arduino, Blynk, Servo Motors, Wi -Fi Module  \nDTMF -Controlled  Home  Appliances  \nAppliance  control  (lights,  fans)  via mobile -call DTMF  tones decoded by  MT8870. \nTech: Arduino, MT8870 DTMF Decoder, Relay Module  \nAlcohol  Sensing  & Engine  Lock  System  (Presented  at ICDMAI  2024)  \nPrototype  using  MQ3  sensor  for alcohol  detection  and engine  lock, with buzzer,  relay,  motor,  and serial  monitoring. \nTech: Arduino, MQ3 Sensor, Relay, Buzzer, Motor  \nStudent  Attenda nce Using  Face  Recognition  \nReal-time webcam  attendance  using  OpenCV,  face recognition,  TensorFlow;  stored  in database. \nTech: Python, OpenCV, face recognition, TensorFlow, SQL  \nSkin  Cancer Prediction  via Webcam  (Presented  at ICSVCE  2024)  \nCNN  model  with PyTorch  for real-time detection  via OpenCV  webcam  input. \nTech: Python, PyTorch, OpenCV, CNN  \nAgricultural  Drone  System  (Presented  at ICSTEM  2025)  \nPhysical  drone  with ML-powered  path planning  for pesticide  spraying,  nutrient  delivery,  real-time monitoring,  and data visualization. \nTech: Python, ML Algorithms, Drone Hardware, Path Planning  \n \nExperience  \n1) ISA  VIT Pune  - Operational  Coordinator  & Team  Leader  (2022  - 2024) \nLed 15 -member team, website handling, project execution.  \n2) EPEC, VIT Pune - Aesthetic Coordinator (2022 - 2023) \nManaged  team  of 6 volunteers  for event  planning  & design.  \nInternship  \n \n1) Software developer at Tech Mahindra  – Built a project on AI renewable smart intrusion detection using GEN AI (Jun – Nov 25)  \nTech: Python, react, JavaScript , flask, MongoDB, ml algorithms, computer vision models  \n2) Teachnook (with IIT Roorkee) - Built ML model for predicting machine failures.  \nTech: RStudio, Python, R, ML Algorithms  \n \nCertifications  & Achievements  \n- Python  on Udemy  \n- C programming  on Udemy  \n- Figma  Design  Basics  and Features  on Alison  \n- Successfully  executed  a company  project  (ECOMACK)  as Team  Leader  \n- Awarded  for managing  the Aesthetic  Department  of a college  program  \n- Google  Cloud  Foundation  Course  by Google  Cloud  \n- Fundamentals  of Deep  Learning  by NVIDIA  \n",
+    "text_hash": "126224a7061bc31c63127613cd0568770997bb5d",
+    "size": 133652,
+    "uploaded_at": "2026-06-12 10:26:28",
+    "skills": [
+      "css",
+      "flask",
+      "github",
+      "google",
+      "html",
+      "java",
+      "javascript",
+      "mongodb",
+      "mysql",
+      "opencv",
+      "python",
+      "pytorch",
+      "react",
+      "sql",
+      "tensorflow"
+    ],
+    "matched": [
+      "react",
+      "css"
+    ],
+    "missing": [
+      "node.js",
+      "rest",
+      "graphql",
+      "typescript",
+      "tailwind"
+    ],
+    "score": 47.28,
+    "status": "SHORTLIST",
+    "profile": {
+      "name": "Vedangi  Kulkarni",
+      "email": "vedangi.kulkarni22@vit.edu",
+      "phone": "+91-7715942338",
+      "linkedin": null,
+      "github": null,
+      "years_experience": 7,
+      "experience_level": "Senior",
+      "education": "B.Tech",
+      "current_role": null,
+      "red_flags": [
+        "Possible job hopping (many short stints)"
+      ]
+    },
+    "ai_verdict": null,
+    "ai_questions": [],
+    "semantic_reason": null,
+    "must_haves": []
+  },
+  {
+    "id": "1781194744-1acb89a9-Vedangi_Kulkarni_Professional_Resume.pdf",
+    "filename": "Vedangi_Kulkarni_Professional_Resume.pdf",
+    "name": "VEDANGI  KULKARNI",
+    "text": "VEDANGI  KULKARNI  \nSoftware  Developer  | Full Stack  Developer  | Python  Developer  | React  Developer  | Flask  | REST  API | Machine  Learning  | MongoDB  | MySQL  \n| JavaScript  | Git | Agile  | fresher  | 0-1 years  \nvedangi.kulkarni22@vit.edu  · +91-7715942338  · linkedin.com/in/vedangi -kulkarni  · github.com/vedangi -24 · Pune,  India  \n \n \nPROFESSIONAL  SUMMARY  \n \nComputer Engineering student (VIT Pune ) with 6 months of industry experience at Tech Mahindra building  AI-powered  full-\nstack  systems  using  Python,  React,  Flask,  MongoDB,  and REST  APIs.  Shipped  10+ projects  spanning fraud detection, \ncomputer vision, and ML pipelines — three accepted at international IEEE conferences. Seeking a Software Developer or Full \nStack Develope r role with 0 –1 years experience requirement, available to join immediately.  \n \nEXPERIENCE  \n \nSoftware  Developer  Intern  | Tech  Mahindra  Jun 2025 – Nov 2025  \n• Production  Full-Stack  Development: Built and deployed  a React  + Flask  + MongoDB  application  for real-time AI \nintrusion alerts, handling end -to-end feature delivery across 3 Agile sprint cycles.  \n• ML & REST  API Integration:  Integrated  Python/scikit -learn  ML classification  models  into a REST  API pipeline,  reducing \nfalse-positive alert rate by ~30% over r ule-based baselines.  \n• Generative  AI & Computer  Vision: Engineered  Smart  Intrusion  Detection  System  using  GenAI  and OpenCV -based \ncomputer vision models in a cross -functional Agile team of 6.  \n• On-time Delivery:  Owned  backend  API design  and model  integration — delivered  all milestones  within  a 6-month \nengagement.  \nMachine  Learning  Intern  | Teachnook  × IIT Roorkee  2023  \n• Predictive  ML Model:  Built a machine  failure  classification  model  in Python  and R with measurable  accuracy \nimprovement over logistic baseline; adopted for program capstone showcase.  \n• Feature  Engineering:  Performed  data cleaning,  cross -validation,  and feature  engineering  on industrial  sensor  datasets \nusing RStudio, scikit -learn, and pandas.  \nKEY PROJECTS  \n \nFraud  Detection  Using  Graph  AI | Python  · Flask  · Random  Forest  · NetworkX  · REST  API \n• Classified  fraudulent  transactions  with 80/20  train-test Random  Forest  model;  deployed  as Flask  REST  API web app with \ninteractive NetworkX graph visualizations — red = fraud, blue = normal.  \n• GitHub:  github.com/vedangi -24 \n \nAgricultural  Drone  System  | Python  · ML · Path  Planning  · Hardware \nPresented at ICSTEM 2025 — International Conference  \n• Built physical  autonomous  drone  with ML-powered  path planning  for precision  pesticide  spraying;  implemented  real-time \ndata visualization dashboard for crop monitoring.  \n \nSkin Cancer  Prediction  via Webcam  | Python  · PyTorch  · OpenCV  · CNN \nPresented at ICSVCE 2024 — International Conference  \n• Trained  CNN  model  (PyTorch)  for real-time binary  skin lesion  classification  via OpenCV  webcam  input;  optimised \npipeline to run on CPU without GPU infrastructure.  \n \nFood  Ordering  Platform  with ML Recommendations  | Python  · Flask  · React  · scikit -learn  · JavaScript  \n• Full-stack  web application  with content -based  recommendation  engine  and NLP sentiment  analysis  on Kaggle  restaurant \nreviews using scikit -learn, pandas, and NumPy.  \n \nStudent  Attendance  via Face  Recognition  | Python  · OpenCV  · TensorFlow ·  SQL · MySQL  \n• Real-time face recognition  attendance  system  using  OpenCV  + TensorFlow;  auto-logs 100%  of entries  to SQL database, \neliminating proxy attendance completely.  \n \nAlcohol  Sensing  & Engine  Lock  System  | Arduino  · IoT · MQ3  Sensor  · Relay \nPresented at ICDMAI 2024 — International Conference  \n• IoT safety  prototype  using  MQ3  sensor  to auto-engage  engine  lock relay  on alcohol  detection;  presented  at international \nconference on data management and AI.  EDUCATION  \n \nB.Tech  — Computer  Engineering  | Vishwakarma  Institute  of Technology,  Pune  2022 – 2026  \n• 3 research  papers  accepted  at IEEE  / international  conferences  within  2 years  of undergraduate  study.  \n \nTECHNICAL  SKILLS  \n \nProgramming  Languages:  Python,  JavaScript,  Java,  C, SQL,  R, HTML5,  CSS3  \nFrameworks  & Libraries:  React.js,  Flask,  Node.js,  scikit -learn,  TensorFlow,  PyTorch,  OpenCV,  pandas,  NumPy,  Matplotlib, \nNetworkX  \nWeb Development:  Full Stack  Development,  REST  API, Responsive  Design,  HTML5,  CSS3,  JavaScript,  React.js  \nDatabases:  MySQL,  MongoDB,  SQL,  Google  Cloud  Storage  \nML & AI: Machine  Learning,  Deep  Learning,  Computer  Vision,  NLP,  Generative  AI, Random  Forest,  CNN,  Sentiment  Analysis  \nTools  & Platforms:  Git, GitHub,  VS Code,  Agile,  Jira, Figma,  Docker  (basic),  Linux  (basic),  Arduino  \nSoft Skills:  Team  Leadership,  Agile  Delivery,  Cross -functional  Collaboration,  Technical  Documentation  \n \nCERTIFICATIONS  & ACHIEVEMENTS  \n \n• Fundamentals  of Deep  Learning — NVIDIA  \n• Google  Cloud  Foundation  — Google  Cloud  \n• Python  & C Programming  — Udemy  \n• Figma  Design  Basics  — Alison  \n• 3 IEEE  international  conference  publications:  ICSTEM  2025,  ICSVCE  2024,  ICDMAI  2024 \n• Successfully  led ECOMACK  company  project  end-to-end as Team  Leader  \n \nLEADERSHIP  \nOperational  Coordinator  & Team  Leader  | ISA VIT Pune  2022 – 2024  \n• Directed  15-member  technical  team  across  4 semesters;  managed  club website  and delivered  3+ major  projects  on \ndeadline.  \nAesthetic  Coordinator  | EPEC,  VIT Pune  2022 – 2023  \n• Led 6-volunteer  design  team  for college -wide events;  awarded  for outstanding  management  of Aesthetic  Department.  ",
+    "text_hash": "1acb89a973d69a29eddf55f55a8a721d87a59410",
+    "size": 303816,
+    "uploaded_at": "2026-06-12 10:26:28",
+    "skills": [
+      "docker",
+      "flask",
+      "git",
+      "github",
+      "java",
+      "javascript",
+      "mongodb",
+      "mysql",
+      "node.js",
+      "opencv",
+      "python",
+      "pytorch",
+      "react",
+      "rest",
+      "sql",
+      "tensorflow"
+    ],
+    "matched": [
+      "rest",
+      "react",
+      "node.js"
+    ],
+    "missing": [
+      "typescript",
+      "graphql",
+      "tailwind",
+      "css"
+    ],
+    "score": 37.43,
+    "status": "REJECT",
+    "profile": {
+      "name": "VEDANGI  KULKARNI",
+      "email": "vedangi.kulkarni22@vit.edu",
+      "phone": "+91-7715942338",
+      "linkedin": "linkedin.com/in/vedangi",
+      "github": "github.com/vedangi",
+      "years_experience": 0,
+      "experience_level": "Junior",
+      "education": "ms",
+      "current_role": "Software  Developer  Intern  | Tech  Mahindra  Jun 2025 – Nov 2025",
+      "red_flags": [
+        "Possible job hopping (many short stints)"
+      ]
+    },
+    "ai_verdict": null,
+    "ai_questions": [],
+    "semantic_reason": null,
+    "must_haves": []
+  }
+]

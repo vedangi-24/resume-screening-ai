@@ -1,0 +1,20 @@
+python
+java
+c
+html
+css
+javascript
+react
+flask
+sql
+mysql
+mongodb
+machine learning
+tensorflow
+pytorch
+opencv
+git
+github
+docker
+aws
+data structures

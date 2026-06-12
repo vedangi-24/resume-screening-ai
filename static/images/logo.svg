@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#6c5ce7"/>
+      <stop offset="1" stop-color="#9b59ff"/>
+    </linearGradient>
+  </defs>
+  <rect rx="18" width="120" height="120" fill="url(#g)"/>
+  <text x="50%" y="54%" font-family="Inter, Arial" font-size="44" font-weight="800" fill="white" text-anchor="middle" dominant-baseline="central">RIQ</text>
+</svg>
